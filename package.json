@@ -1,0 +1,13 @@
+{
+  "name": "keyview",
+  "version": "0.1.0",
+  "description": "Confidential social trading on NEAR Intents with time-limited viewing keys",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test \"test/*.test.js\"",
+    "smoke": "node scripts/smoke.js"
+  }
+}

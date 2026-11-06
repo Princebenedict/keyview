@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KeyView</title>
+<style>
+  :root { --bg:#0e1116; --panel:#171b22; --line:#2a313c; --text:#e6e9ee; --mute:#8b95a5; --accent:#00ec97; --bad:#ff6b6b; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 system-ui, sans-serif; }
+  header { display:flex; gap:20px; align-items:center; padding:14px 24px; border-bottom:1px solid var(--line); }
+  header b { font-size:18px; } header a { color:var(--mute); text-decoration:none; } header a:hover { color:var(--text); }
+  .badge { margin-left:auto; font-size:12px; padding:3px 10px; border:1px solid var(--line); border-radius:99px; color:var(--mute); }
+  main { max-width:960px; margin:0 auto; padding:24px; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px; margin-bottom:18px; }
+  h2 { margin:0 0 12px; font-size:17px; } h3 { margin:16px 0 8px; font-size:14px; color:var(--mute); text-transform:uppercase; letter-spacing:.05em; }
+  table { width:100%; border-collapse:collapse; } th,td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); } th { color:var(--mute); font-weight:500; font-size:13px; }
+  tr.click { cursor:pointer; } tr.click:hover { background:#1d232c; }
+  input, select, textarea { background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 10px; font:inherit; width:100%; }
+  label { display:block; font-size:13px; color:var(--mute); margin:10px 0 4px; }
+  button { background:var(--accent); color:#04130c; border:0; border-radius:6px; padding:8px 14px; font:inherit; font-weight:600; cursor:pointer; margin-top:12px; }
+  button.ghost { background:transparent; color:var(--text); border:1px solid var(--line); } button.small { padding:3px 9px; margin:0; font-size:13px; }
+  .row { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; } .row > div { min-width:0; }
+  .stat { background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:10px 12px; } .stat span { display:block; color:var(--mute); font-size:12px; } .stat b { font-size:20px; }
+  .pos { color:var(--accent); } .neg { color:var(--bad); } .mute { color:var(--mute); }
+  .empty { color:var(--mute); padding:14px 0; } .err { color:var(--bad); margin-top:8px; } .ok { color:var(--accent); margin-top:8px; }
+  .locked { border:1px dashed var(--line); border-radius:8px; padding:18px; color:var(--mute); }
+  pre { background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:10px; overflow:auto; font-size:12px; margin:6px 0; }
+  code { background:var(--bg); padding:1px 5px; border-radius:4px; }
+</style>
+</head>
+<body>
+<header>
+  <b>KeyView</b>
+  <a href="#/">Leaderboard</a>
+  <a href="#/dashboard">Trader dashboard</a>
+  <span class="badge" id="mode">loading</span>
+</header>
+<main id="app"></main>
+<script src="/app.js" type="module"></script>
+</body>
+</html>
