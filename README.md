@@ -2,6 +2,8 @@
 
 Confidential social trading on NEAR. Traders keep their strategy private and sell time-limited viewing keys. Anyone can see public PnL and risk. Only key holders can see the trades and thesis, and copy them through NEAR Intents.
 
+Live demo: https://keyview-be1v.onrender.com
+
 Track: Privacy and Private AI (secondary: Agent Economy).
 
 ## Two modes
