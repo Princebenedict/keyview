@@ -1,0 +1,12 @@
+{
+  "name": "keyview-browser-test",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node browser.test.mjs"
+  },
+  "dependencies": {
+    "@sparticuz/chromium": "^153.0.0",
+    "puppeteer-core": "^25.16.0"
+  }
+}

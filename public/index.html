@@ -3,40 +3,233 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KeyView</title>
-<style>
-  :root { --bg:#0e1116; --panel:#171b22; --line:#2a313c; --text:#e6e9ee; --mute:#8b95a5; --accent:#00ec97; --bad:#ff6b6b; }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 system-ui, sans-serif; }
-  header { display:flex; gap:20px; align-items:center; padding:14px 24px; border-bottom:1px solid var(--line); }
-  header b { font-size:18px; } header a { color:var(--mute); text-decoration:none; } header a:hover { color:var(--text); }
-  .badge { margin-left:auto; font-size:12px; padding:3px 10px; border:1px solid var(--line); border-radius:99px; color:var(--mute); }
-  main { max-width:960px; margin:0 auto; padding:24px; }
-  .panel { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:18px; margin-bottom:18px; }
-  h2 { margin:0 0 12px; font-size:17px; } h3 { margin:16px 0 8px; font-size:14px; color:var(--mute); text-transform:uppercase; letter-spacing:.05em; }
-  table { width:100%; border-collapse:collapse; } th,td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); } th { color:var(--mute); font-weight:500; font-size:13px; }
-  tr.click { cursor:pointer; } tr.click:hover { background:#1d232c; }
-  input, select, textarea { background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:6px; padding:8px 10px; font:inherit; width:100%; }
-  label { display:block; font-size:13px; color:var(--mute); margin:10px 0 4px; }
-  button { background:var(--accent); color:#04130c; border:0; border-radius:6px; padding:8px 14px; font:inherit; font-weight:600; cursor:pointer; margin-top:12px; }
-  button.ghost { background:transparent; color:var(--text); border:1px solid var(--line); } button.small { padding:3px 9px; margin:0; font-size:13px; }
-  .row { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; } .row > div { min-width:0; }
-  .stat { background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:10px 12px; } .stat span { display:block; color:var(--mute); font-size:12px; } .stat b { font-size:20px; }
-  .pos { color:var(--accent); } .neg { color:var(--bad); } .mute { color:var(--mute); }
-  .empty { color:var(--mute); padding:14px 0; } .err { color:var(--bad); margin-top:8px; } .ok { color:var(--accent); margin-top:8px; }
-  .locked { border:1px dashed var(--line); border-radius:8px; padding:18px; color:var(--mute); }
-  pre { background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:10px; overflow:auto; font-size:12px; margin:6px 0; }
-  code { background:var(--bg); padding:1px 5px; border-radius:4px; }
-</style>
+<title>KeyView | Trade in private. Sell the key, not the alpha.</title>
+<meta name="description" content="KeyView shows a public scoreboard and keeps every trade behind a time-limited viewing key on NEAR.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>document.documentElement.classList.add("js");try{var p=JSON.parse(localStorage.getItem("kv.prefs")||"{}");if(p.theme)document.documentElement.dataset.theme=p.theme}catch(e){}</script>
+<link rel="preload" href="/fonts/unbounded-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/theme.css">
+<link rel="stylesheet" href="/landing.css">
 </head>
 <body>
-<header>
-  <b>KeyView</b>
-  <a href="#/">Leaderboard</a>
-  <a href="#/dashboard">Trader dashboard</a>
-  <span class="badge" id="mode">loading</span>
+<div class="bg"><i></i><i></i><i></i></div>
+<div class="progress" id="progress"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<header class="nav" id="nav">
+  <a class="logo" href="/" aria-label="KeyView home">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00f5a0"/><stop offset="1" stop-color="#2bffd0"/></linearGradient></defs><circle class="ring" cx="20" cy="20" r="15" fill="none" stroke="url(#lg)" stroke-width="2.4" stroke-dasharray="66 28"/><circle cx="20" cy="17.5" r="4" fill="url(#lg)"/><path d="M18.1 20.6h3.8l1.6 9h-7z" fill="url(#lg)"/></svg>
+    <b>Key<span>View</span></b>
+  </a>
+  <nav class="links">
+    <a href="#boundary">The boundary</a>
+    <a href="#how">How it works</a>
+    <a href="#inside">Under the hood</a>
+    <a href="#status">Status</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a class="btn" href="/app">Launch app</a>
 </header>
-<main id="app"></main>
-<script src="/app.js" type="module"></script>
+
+<main>
+  <section class="hero">
+    <canvas id="flow" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <p class="eyebrow rv"><span class="dot"></span> Private trading on NEAR Intents</p>
+      <h1 class="wordmark" aria-label="KeyView">
+        <span class="w1"><span style="--i:0">K</span><span style="--i:1">e</span><span style="--i:2">y</span></span><span class="w2"><span style="--i:3">V</span><span style="--i:4">i</span><span style="--i:5">e</span><span style="--i:6">w</span></span>
+      </h1>
+      <p class="tagline rv" style="--d:.5s">Trade in private.<br>Sell the key, <em>not the alpha.</em></p>
+      <p class="sub rv" style="--d:.65s">A public scoreboard for everyone. Every trade behind a viewing key that expires. Followers pay for a window of access, then copy through NEAR Intents.</p>
+      <div class="cta rv" style="--d:.8s">
+        <a class="btn big" href="/app">Launch app</a>
+        <a class="btn ghost big" href="#how">See how it works</a>
+      </div>
+      <ul class="chips rv" style="--d:.95s">
+        <li>Public PnL</li><li>Private trades</li><li>Keys that expire</li><li>Revoke any time</li><li>Copy via Intents</li>
+      </ul>
+    </div>
+    <a class="scroll-cue" href="#boundary" aria-label="Scroll down"><span></span></a>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track" id="track">
+      <span>Public scoreboard</span><span>Encrypted trades</span><span>Time-limited keys</span><span>On-chain grants</span><span>Instant revoke</span><span>NEP-413 sign-in</span><span>Copy orders</span><span>Dry-run mode</span>
+    </div>
+  </div>
+
+  <section class="sec" id="boundary">
+    <div class="head rv">
+      <p class="kicker">The boundary</p>
+      <h2>Two layers. One keyhole.</h2>
+      <p class="lede">Move your cursor over the card. Everything blocked out is what the public never sees. Turn the key and it all opens.</p>
+    </div>
+
+    <div class="stage rv" id="stage" data-open="false">
+      <div class="public">
+        <div class="tag"><span class="dot"></span> Visible to everyone</div>
+        <ul class="fields">
+          <li><span class="lab">Total PnL</span><span class="hint">across all closed trades</span></li>
+          <li><span class="lab">Win rate</span><span class="hint">share of trades in profit</span></li>
+          <li><span class="lab">Max drawdown</span><span class="hint">deepest dip from a peak</span></li>
+          <li><span class="lab">Trade count</span><span class="hint">how many, never which</span></li>
+        </ul>
+        <svg class="spark" viewBox="0 0 240 70" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#00f5a0" stop-opacity=".35"/><stop offset="1" stop-color="#00f5a0" stop-opacity="0"/></linearGradient></defs>
+          <path class="area" d="M0 58 L30 50 L60 54 L90 38 L120 42 L150 24 L180 30 L210 12 L240 16 L240 70 L0 70Z" fill="url(#sg)"/>
+          <path class="line" pathLength="1" d="M0 58 L30 50 L60 54 L90 38 L120 42 L150 24 L180 30 L210 12 L240 16" fill="none" stroke="#00f5a0" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+        <p class="note">Shape only. An illustration, not live data.</p>
+      </div>
+
+      <div class="private" id="private">
+        <div class="tag amber"><span class="dot"></span> Behind the key</div>
+        <ul class="fields">
+          <li><span class="lab">Pair</span><span class="hint">the market traded</span></li>
+          <li><span class="lab">Side</span><span class="hint">long or short</span></li>
+          <li><span class="lab">Size</span><span class="hint">share of the portfolio</span></li>
+          <li><span class="lab">Entry and exit</span><span class="hint">the actual prices</span></li>
+          <li><span class="lab">Thesis</span><span class="hint">the trader's reasoning</span></li>
+          <li><span class="lab">Notes</span><span class="hint">anything they wrote down</span></li>
+        </ul>
+        <div class="shield" aria-hidden="true">
+          <div class="tag amber"><span class="dot"></span> Behind the key</div>
+          <ul class="fields">
+            <li><span class="lab">Pair</span><span class="hint">the market traded</span></li>
+            <li><span class="lab">Side</span><span class="hint">long or short</span></li>
+            <li><span class="lab">Size</span><span class="hint">share of the portfolio</span></li>
+            <li><span class="lab">Entry and exit</span><span class="hint">the actual prices</span></li>
+            <li><span class="lab">Thesis</span><span class="hint">the trader's reasoning</span></li>
+            <li><span class="lab">Notes</span><span class="hint">anything they wrote down</span></li>
+          </ul>
+        </div>
+        <div class="beam" id="beam" aria-hidden="true"></div>
+      </div>
+
+      <button class="turn" id="turn" type="button" aria-pressed="false"><span class="k"></span><span id="turnLabel">Turn the key</span></button>
+    </div>
+  </section>
+
+  <section class="sec" id="how">
+    <div class="head rv">
+      <p class="kicker">How it works</p>
+      <h2>Four steps from private trade to copied trade.</h2>
+    </div>
+    <div class="how">
+      <ol class="steps">
+        <li class="step rv" data-step="1"><span class="num">01</span><h3>Trade without showing your hand</h3><p>Record each closed trade. The details are encrypted before they are stored. Only the totals leave the vault.</p></li>
+        <li class="step rv" data-step="2"><span class="num">02</span><h3>Publish the scoreboard</h3><p>PnL, win rate, drawdown and trade count update for everyone. No pair, no prices, no thesis.</p></li>
+        <li class="step rv" data-step="3"><span class="num">03</span><h3>Sell a window of access</h3><p>Set a price for 7 or 30 days. A follower pays and receives a viewing key. On testnet it is a grant on a NEAR contract.</p></li>
+        <li class="step rv" data-step="4"><span class="num">04</span><h3>Unlock, then copy</h3><p>Key holders read the thesis and trades, then build NEAR Intents orders scaled to their own budget. You can revoke any holder early.</p></li>
+      </ol>
+
+      <div class="dia-wrap rv">
+        <svg class="dia" id="dia" data-step="1" viewBox="0 36 560 330" role="img" aria-label="Data flow between trader, vault, public board, key gate, follower and NEAR Intents">
+          <defs>
+            <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <path id="p1" d="M162 90 H214"/>
+            <path id="p2" d="M346 90 H398"/>
+            <path id="p3" d="M162 310 H214"/>
+            <path id="p4" d="M280 282 V118"/>
+            <path id="p5" d="M346 310 H398"/>
+          </defs>
+          <use href="#p1" class="e e1"/><use href="#p2" class="e e2"/><use href="#p3" class="e e3"/><use href="#p4" class="e e4"/><use href="#p5" class="e e5"/>
+          <circle r="4.5" class="dotm d1"><animateMotion dur="1.4s" repeatCount="indefinite"><mpath href="#p1"/></animateMotion></circle>
+          <circle r="4.5" class="dotm d2"><animateMotion dur="1.4s" repeatCount="indefinite"><mpath href="#p2"/></animateMotion></circle>
+          <circle r="4.5" class="dotm d3"><animateMotion dur="1.4s" repeatCount="indefinite"><mpath href="#p3"/></animateMotion></circle>
+          <circle r="4.5" class="dotm d4"><animateMotion dur="1.6s" repeatCount="indefinite"><mpath href="#p4"/></animateMotion></circle>
+          <circle r="4.5" class="dotm d5"><animateMotion dur="1.4s" repeatCount="indefinite"><mpath href="#p5"/></animateMotion></circle>
+
+          <g class="n n-trader"><rect x="30" y="62" width="132" height="56" rx="14"/><text x="96" y="95" text-anchor="middle">Trader</text></g>
+          <g class="n n-vault"><rect x="214" y="62" width="132" height="56" rx="14"/><text x="280" y="88" text-anchor="middle">Vault</text><text x="280" y="106" text-anchor="middle" class="sm">encrypted</text></g>
+          <g class="n n-board"><rect x="398" y="62" width="132" height="56" rx="14"/><text x="464" y="88" text-anchor="middle">Public board</text><text x="464" y="106" text-anchor="middle" class="sm">anyone can read</text></g>
+          <g class="n n-follower"><rect x="30" y="282" width="132" height="56" rx="14"/><text x="96" y="315" text-anchor="middle">Follower</text></g>
+          <g class="n n-gate"><rect x="214" y="282" width="132" height="56" rx="14"/><text x="280" y="308" text-anchor="middle">Key gate</text><text x="280" y="326" text-anchor="middle" class="sm">expires, revocable</text></g>
+          <g class="n n-intents"><rect x="398" y="282" width="132" height="56" rx="14"/><text x="464" y="308" text-anchor="middle">NEAR Intents</text><text x="464" y="326" text-anchor="middle" class="sm">copy orders</text></g>
+          <text class="cap" x="246" y="205" text-anchor="end">reads on every request</text>
+        </svg>
+        <p class="dia-note" id="diaNote">Trades go into the vault encrypted.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec lifecycle">
+    <div class="life-grid">
+      <div class="rv">
+        <p class="kicker">Access that ends</p>
+        <h2>A key is a window that closes.</h2>
+        <p class="lede">Every key has an expiry the moment it is sold. The trader can end it sooner. When the window closes, the private view locks again on the next request.</p>
+        <ul class="ticks">
+          <li>7 or 30 day windows, priced by the trader</li>
+          <li>Buying again extends an active key</li>
+          <li>Revoke one holder without touching the rest</li>
+        </ul>
+      </div>
+      <div class="ringbox rv">
+        <svg viewBox="0 0 240 240" class="ring-svg" aria-hidden="true">
+          <circle cx="120" cy="120" r="100" class="track"/>
+          <circle cx="120" cy="120" r="100" class="prog" id="prog" pathLength="100"/>
+        </svg>
+        <div class="ring-center"><b id="ringBig">7</b><span id="ringUnit">days left</span><em id="ringState" class="state on">Key active</em></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="inside">
+    <div class="head rv">
+      <p class="kicker">Under the hood</p>
+      <h2>Built so the claims can be checked.</h2>
+    </div>
+    <div class="cards">
+      <article class="card rv"><h3>Encrypted at rest</h3><p>Trades and tracked copies are sealed with AES-256-GCM, using a separate key per trader, before they reach disk.</p></article>
+      <article class="card rv"><h3>A key is not a wallet</h3><p>A viewing key is a read credential. It cannot sign, and it cannot move funds. The trader's manage rights are separate.</p></article>
+      <article class="card rv"><h3>Grants on NEAR</h3><p>On testnet the key is a grant on an access contract. The server asks the contract on every private request, so a revoke bites at once.</p></article>
+      <article class="card rv"><h3>Wallet sign-in</h3><p>NEP-413 message signing with a single-use nonce, plus a check that the signing key belongs to the account.</p></article>
+      <article class="card rv"><h3>Copy through Intents</h3><p>Holders get quote requests shaped for the NEAR Intents 1Click API, scaled to their budget. Nothing is submitted for them.</p></article>
+      <article class="card rv"><h3>TEE, stated plainly</h3><p>A real attestation quote appears only on a dstack host. Anywhere else the app says there is no TEE and that the operator can read trades.</p></article>
+    </div>
+  </section>
+
+  <section class="sec" id="status">
+    <div class="head rv">
+      <p class="kicker">Status</p>
+      <h2>What is real today.</h2>
+      <p class="lede">No smoke. This is the same list as the README.</p>
+    </div>
+    <div class="status">
+      <div class="col rv"><h3><span class="dot on"></span> Works now</h3><ul>
+        <li>Public PnL, win rate, drawdown, equity curve</li><li>Private gate on thesis and trades</li><li>Expiry and early revoke</li><li>Encryption at rest</li><li>Copy orders and copy tracking</li><li>Dry-run mode with no funds</li></ul></div>
+      <div class="col rv"><h3><span class="dot warn"></span> Needs your setup</h3><ul>
+        <li>Testnet mode: deploy the contract</li><li>Wallet sign-in: tested against a stub RPC, not yet live</li><li>TEE quote: needs a dstack host</li></ul></div>
+      <div class="col rv"><h3><span class="dot off"></span> Not built</h3><ul>
+        <li>Proof that a trade ran confidentially</li><li>Live prices and alerts</li><li>Submitting copy orders for the user</li></ul></div>
+    </div>
+  </section>
+
+  <section class="sec" id="faq">
+    <div class="head rv"><p class="kicker">FAQ</p><h2>Straight answers.</h2></div>
+    <div class="faq rv">
+      <details><summary>Does this use real money?</summary><p>Not by default. Dry-run mode simulates payments and needs no wallet. Testnet mode uses testnet NEAR only.</p></details>
+      <details><summary>Can a key holder move my funds?</summary><p>No. A viewing key only lets someone read your private strategy for a limited time.</p></details>
+      <details><summary>What can the server operator see?</summary><p>Without a TEE, the operator holds the encryption key and can read stored trades. The Security tab states this on every run.</p></details>
+      <details><summary>Does a copy trade execute for me?</summary><p>No. KeyView builds the orders and tracks the result. You submit them yourself.</p></details>
+      <details><summary>Can a key be shared with someone else?</summary><p>In dry-run mode the key is a bearer token, so it can be passed on. On testnet, access is tied to the holder's wallet account.</p></details>
+    </div>
+  </section>
+
+  <section class="final rv">
+    <h2>Open it. No wallet, no funds.</h2>
+    <p>Start in dry-run, create a trader, sell a key, and watch the boundary hold.</p>
+    <a class="btn big" href="/app#/dashboard">Launch app</a>
+  </section>
+</main>
+
+<footer>
+  <a class="logo" href="/"><b>Key<span>View</span></b></a>
+  <span>Built for the NEAR hackathon, Privacy and Private AI track.</span>
+  <a href="/app#/security">Security</a>
+</footer>
+
+<script src="/landing.js" defer></script>
 </body>
 </html>

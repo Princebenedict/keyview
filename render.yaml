@@ -1,0 +1,12 @@
+# One-click deploy on Render. Dry-run mode, no wallet and no funds needed.
+services:
+  - type: web
+    name: keyview
+    runtime: node
+    plan: free
+    buildCommand: echo "nothing to build"
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"

@@ -4,10 +4,15 @@
   "description": "Confidential social trading on NEAR Intents with time-limited viewing keys",
   "type": "module",
   "license": "MIT",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node src/server.js",
     "test": "node --test \"test/*.test.js\"",
-    "smoke": "node scripts/smoke.js"
+    "smoke": "node scripts/smoke.js",
+    "login": "node scripts/near-login.js",
+    "test:contract": "cd contract && cargo test --lib",
+    "dev": "node --watch src/server.js"
   }
 }

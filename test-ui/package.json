@@ -1,0 +1,7 @@
+{
+  "name": "keyview-ui-test",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node ui.test.mjs" },
+  "dependencies": { "jsdom": "^26.0.0" }
+}

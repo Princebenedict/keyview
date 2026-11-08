@@ -1,0 +1,14 @@
+# For a dstack-based TEE host such as a Phala Cloud CVM. The guest agent
+# socket is what lets /api/attestation return a real quote.
+services:
+  keyview:
+    build: .
+    ports: ["3000:3000"]
+    environment:
+      KEYVIEW_MODE: testnet
+      KEYVIEW_CONTRACT: ${KEYVIEW_CONTRACT}
+    volumes:
+      - /var/run/dstack.sock:/var/run/dstack.sock
+      - keyview-data:/app/data
+volumes:
+  keyview-data:
