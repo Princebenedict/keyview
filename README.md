@@ -18,7 +18,6 @@ Track: Privacy and Private AI (secondary: Agent Economy).
 
 Both modes share the same gate code, public metrics and copy flow. Nothing is seeded: a fresh install shows empty states until you create data.
 
-
 ## Tabs
 
 | Tab | What it does |
@@ -63,42 +62,76 @@ No dependencies to install.
 
 ## Run it (testnet)
 
-The commands below use `cargo-near` and `near-cli-rs`. Their syntax changes between releases, so check `--help` if a command is rejected.
+These commands were run end to end on NEAR testnet. `near-cli-rs` and `cargo-near` change syntax between releases, so check `--help` if one is rejected. Use `.testnet` names: the faucet refuses anything else.
 
-1. Build the contract: `cd contract && cargo near build non-reproducible-wasm`
-2. Create a testnet account for the contract and deploy the wasm to it, calling `new` with `{}`.
-3. Start the server: `KEYVIEW_MODE=testnet KEYVIEW_CONTRACT=<contract account> npm start`
-4. Open http://localhost:3000 and use the Trader dashboard. Connect Meteor or HERE wallet. A trader account signs in, creates a profile, saves a strategy, records trades and calls `set_offer` from the wallet.
-5. Connect a second account, open the trader page, Buy viewing key on-chain. See: the private panel unlocks. Only an account with an active grant passes `has_access`.
-6. Trader dashboard, Revoke holder. See: the holder's next private request returns 403.
-
-No browser wallet, for scripts and AI judges:
+1. Create three testnet accounts (contract, trader, buyer), one command each:
 
 ```
-KEYVIEW_URL=http://localhost:3000 NEAR_ACCOUNT_ID=you.testnet NEAR_PRIVATE_KEY=ed25519:... npm run login
+near account create-account sponsor-by-faucet-service <name>.testnet autogenerate-new-keypair --signature-scheme ed25519 save-to-legacy-keychain network-config testnet create
 ```
 
-This signs the same NEP-413 challenge with a local key and prints a session token for `Authorization: Bearer <token>`. Grants can then be created with `near` CLI calls to `buy_key`.
+2. Build and deploy the contract, calling `new`:
 
-Environment variables: see `.env.example`.
+```
+cd contract
+cargo near build non-reproducible-wasm
+near contract deploy <contract>.testnet use-file target/near/keyview_access.wasm with-init-call new json-args '{}' prepaid-gas '100.0 Tgas' attached-deposit '0 NEAR' network-config testnet sign-with-legacy-keychain send
+```
+
+3. The trader puts a 7 day key on sale for 0.1 NEAR, and the buyer buys it:
+
+```
+near contract call-function as-transaction <contract>.testnet set_offer json-args '{"duration_days":7,"price_yocto":"100000000000000000000000"}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as <trader>.testnet network-config testnet sign-with-legacy-keychain send
+near contract call-function as-transaction <contract>.testnet buy_key json-args '{"trader":"<trader>.testnet","duration_days":7}' prepaid-gas '50.0 Tgas' attached-deposit '0.1 NEAR' sign-as <buyer>.testnet network-config testnet sign-with-legacy-keychain send
+```
+
+4. Start the server in testnet mode (use another `PORT` if 3000 is taken):
+
+```
+KEYVIEW_MODE=testnet KEYVIEW_CONTRACT=<contract>.testnet npm start
+```
+
+5. Run the end-to-end check. It signs in as the trader and the buyer with the keys `near` saved, so nothing is pasted:
+
+```
+TRADER=<trader>.testnet BUYER=<buyer>.testnet npm run check:testnet
+```
+
+See: 11 PASS lines. To test revoke, have the trader call `revoke` with `{"holder":"<buyer>.testnet"}`, run the check again, and see the unlock step fail. Buy again and it passes.
+
+6. In the browser, open the server and use the Trader dashboard with Meteor or HERE wallet (see "What is verified" for the status of this part).
+
+Environment variables: see `.env.example`. `npm run login` signs in with a key from the environment and prints a session token, for scripts.
 
 ## What is verified, and what is not
 
-Verified in the authoring sandbox:
-- 18 Node tests: public/private boundary, trade log, analytics, copy tracking, export and delete, encryption at rest, expiry, revoke, key-to-trader binding, Intents order building, NEP-413 sign and verify, sign-in replay and forgery rejection, the on-chain gate.
+Verified on the live NEAR testnet, in November 2026:
+- The access contract is deployed at `benkeyview.testnet`.
+- The server in testnet mode talked to the real NEAR RPC. The trader and buyer signed in with NEP-413 messages using their real keys, and the server confirmed those keys belong to the accounts on chain.
+- The key offer shown to the public is read from the contract.
+- A buyer who paid 0.1 NEAR through `buy_key` unlocked the private view. Before buying, the same account was refused.
+- After the trader called `revoke`, the buyer's very next request was refused. After buying again, access returned.
+- Copy orders were built for the signed-in buyer's account.
+
+Proof (open in a NEAR testnet explorer):
+- Contract deploy and `new`: `A6Q73ZG2EmqeHxfRNdf8SmkAS5dyy1Wzt4tPiJycZpsh`
+- Trader `revoke` of the buyer: `AjWLB944fNi2eRq6Rk5Uou8Q7JZrnRBP84yaHk3Eo5Ku`
+- Buyer `buy_key` after the revoke: `7jBmbUsDCntNpvB5frxgfzsFvSiUpibKsyUB6R4QSbNT`
+- Accounts: contract `benkeyview.testnet`, trader `benkeyview-trader.testnet`, buyer `benkeyview-buyer.testnet`. Link form: `https://explorer.testnet.near.org/transactions/<id>`.
+
+Verified in the authoring sandbox and in CI:
+- 18 Node tests: public/private boundary, trade log, analytics, copy tracking, export and delete, encryption at rest, expiry, revoke, key-to-trader binding, Intents order building, NEP-413 sign and verify, sign-in replay and forgery rejection, the on-chain gate against a stub RPC.
 - 6 Rust unit tests on the contract (`npm run test:contract`), and the contract compiles to wasm.
 - The dry-run UI flow across all seven tabs (39 checks), by running the real `public/app.js` in jsdom against a live server (`test-ui/`, optional, needs `npm install` there).
-- `npm run smoke` against a running server.
-- The landing page and app in real headless Chromium at desktop and phone width (`test-browser/`, optional): no console errors, no sideways scroll, key toggle, scroll-driven diagram, countdown ring, FAQ, reduced motion. I also reviewed screenshots of each screen.
+- `npm run smoke` against a running server, including the public demo.
+- The landing page and app in real headless Chromium at desktop and phone width (`test-browser/`, optional): no console errors, no sideways scroll, key toggle, scroll-driven diagram, countdown ring, FAQ, reduced motion.
 
-Not verified, because the sandbox could not reach the NEAR network or run a browser:
-- Testnet mode against the real NEAR RPC. The tests use a local stub that answers the same JSON-RPC requests, so request shapes are checked against my reading of the protocol, not against a live node.
-- The contract deployed on a live network, and `buy_key` moving real testnet funds.
-- The wallet-selector code in `public/wallet.js` in a real browser.
+Not verified:
+- The wallet-selector code in `public/wallet.js` in a real browser with Meteor or HERE wallet. The chain steps above were done with `near` CLI keys, not through the browser wallet.
+- `set_offer`, `buy_key` and `revoke` sent from the browser UI. The same contract calls work from the CLI.
 - A TEE quote. `/api/attestation` returns a real quote only on a dstack host and otherwise says plainly that no TEE is present.
 - Submitting the generated orders to the Intents 1Click API.
-
-Expect to fix small things on the first live run. The most likely places are wallet-selector method signatures and CLI flags.
+- Mainnet. Nothing here has been deployed to mainnet.
 
 ## How the boundary works
 
