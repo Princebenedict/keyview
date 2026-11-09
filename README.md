@@ -4,6 +4,8 @@ Confidential social trading on NEAR. Traders keep their strategy private and sel
 
 Live demo: https://keyview-be1v.onrender.com
 
+Live demo (real NEAR testnet): https://keyview-testnet.onrender.com/app
+
 Track: Privacy and Private AI (secondary: Agent Economy).
 
 ## Two modes
