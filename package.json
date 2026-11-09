@@ -13,6 +13,7 @@
     "smoke": "node scripts/smoke.js",
     "login": "node scripts/near-login.js",
     "test:contract": "cd contract && cargo test --lib",
-    "dev": "node --watch src/server.js"
+    "dev": "node --watch src/server.js",
+    "check:testnet": "node scripts/testnet-check.js"
   }
 }
