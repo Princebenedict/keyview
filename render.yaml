@@ -1,4 +1,6 @@
-# One-click deploy on Render. Dry-run mode, no wallet and no funds needed.
+# Two public demos from one repo.
+# keyview:         dry-run, no wallet and no funds needed.
+# keyview-testnet: real NEAR testnet, keys are grants on benkeyview.testnet.
 services:
   - type: web
     name: keyview
@@ -10,3 +12,17 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "22"
+  - type: web
+    name: keyview-testnet
+    runtime: node
+    plan: free
+    buildCommand: echo "nothing to build"
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: KEYVIEW_MODE
+        value: testnet
+      - key: KEYVIEW_CONTRACT
+        value: benkeyview.testnet
