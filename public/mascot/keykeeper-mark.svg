@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" role="img" aria-label="KeyView">
+<style>
+@keyframes dr{0%,100%{transform:translate(0,0)}50%{transform:translate(var(--dx),var(--dy))}}
+.p{animation:dr var(--d) ease-in-out var(--l) infinite}
+@media (prefers-reduced-motion:reduce){.p{animation:none}}
+</style>
+<path d="M8 27 L32 27 L36 34 L4 34 Z" fill="#09090B"/>
+<path d="M11 7 C14 3 26 3 29 7 L31 21 C26 27 14 27 9 21 Z" fill="#09090B" stroke="#09090B" stroke-width="1.5" stroke-linejoin="round"/>
+<path d="M15 9 H25 L26 20 C23 23 17 23 14 20 Z" fill="#2A2A31"/>
+<g fill="#D2E823"><circle cx="20" cy="13.5" r="2.8"/><path d="M18.7 15.9 H21.3 L22.4 20 H17.6 Z"/></g>
+<g stroke="#09090B" stroke-width="1"><rect class="p" style="--dx:1px;--dy:-2px;--d:3.6s;--l:0s" x="10" y="36" width="3.2" height="3.2" fill="#D2E823"/><rect class="p" style="--dx:-1px;--dy:-2px;--d:4.4s;--l:-1s" x="18" y="36.5" width="3" height="3" fill="#D2E823"/><rect class="p" style="--dx:1px;--dy:-2px;--d:5s;--l:-2s" x="26" y="36" width="2.8" height="2.8" fill="#D2E823"/></g>
+</svg>

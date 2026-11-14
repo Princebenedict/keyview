@@ -34,11 +34,19 @@ Both modes share the same gate code, public metrics and copy flow. Nothing is se
 
 ## Design
 
-- `/` is the product page: animated wordmark, a flow-field background that bends around the cursor, an interactive "keyhole" card, a scroll-driven how-it-works diagram, a key countdown ring, and an honest status section.
-- `/app` is the app, in the same visual language. Light and dark themes, switched in Settings.
-- Motion respects `prefers-reduced-motion`. The page works without JavaScript for its content, and the canvas and animations are skipped when paused or off-screen.
-- Fonts (Unbounded, Manrope, JetBrains Mono) are bundled in `public/fonts` under the SIL Open Font License, so the design renders offline. Licenses sit beside the files.
-- Illustrations on the product page are labeled as illustrations. No fake traders, numbers or testimonials appear anywhere.
+Neo-Brutalist "Acid": a paper background (`#F8F4E8`), ink-black borders and type (`#09090B`), and one acid accent (`#D2E823`). Headings and every uppercase string are Dela Gothic One, body text is Space Grotesk, small labels are Space Mono. All tokens live in `public/theme.css`.
+
+The rules, and how they are kept:
+- 2px ink borders on every button, link and card. Shadows are solid offset blocks, never blurred.
+- No large box has a corner radius above 32px. Pills and circles are the only fully round shapes.
+- Buttons press: they move 2px and lose their shadow on hover, and drop 4px when clicked.
+- Display text glitches on hover (five moves in 0.3s). The marquee loops in 20s. Accent cards float 10px up and down. A 3% SVG noise sits over the whole page.
+- A 32px white cursor with `mix-blend-mode: difference` follows the mouse with a 0.2 lerp and grows 2.5x over links and buttons. It is off on touch screens.
+- Dark mode (Settings) keeps the same rules with acid shadows on an ink page.
+
+`/` is the product page: a 12-column hero, a keyhole card that reveals the private fields under your cursor, a horizontal rail of step cards with arrow buttons, a bento grid, and a full-width ink footer. `/app` is the app in the same system. The mascot, The Keykeeper, is three flat SVGs in `public/mascot/`, rebuilt with `python3 scripts/gen-mascot.py`.
+
+Motion respects `prefers-reduced-motion`. The fonts are bundled in `public/fonts` under the SIL Open Font License, so the design renders offline. There is no build step and no framework.
 
 ## Run it (dry-run)
 
@@ -126,7 +134,7 @@ Verified in the authoring sandbox and in CI:
 - 6 Rust unit tests on the contract (`npm run test:contract`), and the contract compiles to wasm.
 - The dry-run UI flow across all seven tabs (39 checks), by running the real `public/app.js` in jsdom against a live server (`test-ui/`, optional, needs `npm install` there).
 - `npm run smoke` against a running server, including the public demo.
-- The landing page and app in real headless Chromium at desktop and phone width (`test-browser/`, optional): no console errors, no sideways scroll, key toggle, scroll-driven diagram, countdown ring, FAQ, reduced motion.
+- The landing page and app in real headless Chromium at desktop and phone width (`test-browser/`, optional): no console errors, no sideways scroll, no blurred shadows, 2px borders on every interactive element, no large radius above 32px, the glitch, the cursor scaling, the keyhole, the step rail, the countdown ring, the FAQ, and reduced motion. I also reviewed screenshots of each screen.
 
 Not verified:
 - The wallet-selector code in `public/wallet.js` in a real browser with Meteor or HERE wallet. The chain steps above were done with `near` CLI keys, not through the browser wallet.
@@ -167,7 +175,7 @@ src/chain.js        NEAR RPC client and on-chain ledger
 src/nep413.js       NEP-413 verify and sign, base58
 src/attestation.js  dstack TEE quote
 src/intents.js      Intents quote request builder
-public/             index.html (product page), app.html + app.js (app), theme.css, fonts, no build step
+public/             index.html + landing.* (product page), app.html + app.* (app), theme.css, cursor.js, mascot/, fonts/, no build step
 test/               Node tests
 test-ui/            optional jsdom UI test
 test-browser/       optional real-browser test

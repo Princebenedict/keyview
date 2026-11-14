@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 330" role="img" aria-label="The Keykeeper: a hooded sentinel with a keyhole-shaped visor, its cloak breaking into pieces">
+<style>
+@keyframes dr{0%,100%{transform:translate(0,0)}50%{transform:translate(var(--dx),var(--dy))}}
+.p{animation:dr var(--d) ease-in-out var(--l) infinite}
+@media (prefers-reduced-motion:reduce){.p{animation:none}}
+</style>
+<path d="M50 180 L190 180 L198 204 L184 212 L178 238 L160 230 L152 256 L134 244 L120 276 L106 248 L90 262 L84 232 L66 242 L60 212 L42 204 Z" fill="#09090B" stroke="#09090B" stroke-width="2" stroke-linejoin="round"/>
+<path d="M72 100 L168 100 L192 180 L48 180 Z" fill="#09090B" stroke="#09090B" stroke-width="2" stroke-linejoin="round"/>
+<path d="M103 104 H137 L147 176 H93 Z" fill="#2A2A31" stroke="#F8F4E8" stroke-opacity=".55" stroke-width="1.5"/>
+<path d="M66 98 L96 94 L92 112 L70 116 Z" fill="#2A2A31" stroke="#F8F4E8" stroke-opacity=".55" stroke-width="1.5"/>
+<path d="M174 98 L144 94 L148 112 L170 116 Z" fill="#2A2A31" stroke="#F8F4E8" stroke-opacity=".55" stroke-width="1.5"/>
+<path d="M68 118 L54 178 L66 184 L84 128 Z" fill="#09090B" stroke="#09090B" stroke-width="2"/>
+<circle cx="60" cy="187" r="6" fill="#2A2A31" stroke="#09090B" stroke-width="2"/>
+<path d="M172 118 L186 178 L174 184 L156 128 Z" fill="#09090B" stroke="#09090B" stroke-width="2"/><circle cx="180" cy="187" r="6" fill="#2A2A31" stroke="#09090B" stroke-width="2"/>
+<path d="M110 94 H130 V102 H110 Z" fill="#09090B"/>
+<path d="M88 36 C102 22 138 22 152 36 L158 84 C140 99 100 99 82 84 Z" fill="#09090B" stroke="#09090B" stroke-width="2" stroke-linejoin="round"/>
+<path d="M100 42 H140 L143 82 C131 92 109 92 97 82 Z" fill="#2A2A31" stroke="#F8F4E8" stroke-opacity=".55" stroke-width="1.5"/>
+<g fill="#D2E823"><circle cx="120" cy="56" r="9"/><path d="M115.5 62 H124.5 L128 80 H112 Z"/></g>
+<g class="p" style="--dx:-4.9px;--dy:-6.8px;--d:6.1s;--l:-1.3s"><rect x="88.4" y="179.8" width="13.0" height="13.0" transform="rotate(68 94.9 186.2)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:3.9px;--dy:-10.9px;--d:3.9s;--l:-3.8s"><rect x="108.1" y="183.6" width="11.4" height="11.4" transform="rotate(7 113.8 189.3)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:0.7px;--dy:-10.8px;--d:4.5s;--l:-3.2s"><rect x="120.3" y="196.5" width="11.6" height="11.6" transform="rotate(5 126.1 202.4)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:1.7px;--dy:-8.6px;--d:5.0s;--l:-0.4s"><rect x="118.9" y="196.5" width="12.2" height="12.2" transform="rotate(73 125.0 202.6)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-0.4px;--dy:-3.7px;--d:4.4s;--l:-1.5s"><rect x="88.7" y="195.4" width="11.9" height="11.9" transform="rotate(40 94.7 201.4)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:4.5px;--dy:-5.4px;--d:4.1s;--l:-5.9s"><rect x="140.1" y="201.4" width="9.9" height="9.9" transform="rotate(63 145.0 206.3)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-0.9px;--dy:-3.3px;--d:3.4s;--l:-3.3s"><rect x="106.6" y="203.5" width="11.6" height="11.6" transform="rotate(62 112.4 209.3)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:1.0px;--dy:-7.9px;--d:5.9s;--l:-5.7s"><rect x="145.7" y="214.5" width="10.1" height="10.1" transform="rotate(63 150.7 219.5)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:5.9px;--dy:-4.6px;--d:4.1s;--l:-2.3s"><rect x="131.9" y="215.3" width="9.0" height="9.0" transform="rotate(73 136.4 219.8)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-0.1px;--dy:-10.0px;--d:4.1s;--l:-4.4s"><rect x="65.6" y="220.2" width="9.9" height="9.9" transform="rotate(14 70.6 225.1)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:0.6px;--dy:-4.0px;--d:5.8s;--l:-5.2s"><rect x="159.7" y="220.9" width="9.7" height="9.7" transform="rotate(51 164.6 225.8)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-4.2px;--dy:-10.4px;--d:3.9s;--l:-1.4s"><rect x="106.1" y="223.3" width="9.1" height="9.1" transform="rotate(29 110.6 227.8)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:0.4px;--dy:-6.5px;--d:4.2s;--l:-0.8s"><rect x="125.9" y="228.9" width="8.5" height="8.5" transform="rotate(53 130.2 233.1)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:4.8px;--dy:-5.0px;--d:6.0s;--l:-4.8s"><rect x="168.2" y="235.4" width="9.4" height="9.4" transform="rotate(58 172.9 240.1)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-3.7px;--dy:-3.1px;--d:4.6s;--l:-0.7s"><rect x="104.0" y="234.8" width="7.5" height="7.5" transform="rotate(7 107.8 238.5)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:1.4px;--dy:-11.4px;--d:3.9s;--l:-2.3s"><rect x="66.2" y="239.5" width="8.6" height="8.6" transform="rotate(46 70.5 243.7)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:4.2px;--dy:-3.1px;--d:4.7s;--l:-2.9s"><rect x="174.1" y="243.0" width="8.4" height="8.4" transform="rotate(14 178.3 247.2)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:0.2px;--dy:-10.2px;--d:6.2s;--l:-2.2s"><rect x="64.0" y="241.1" width="7.4" height="7.4" transform="rotate(20 67.7 244.7)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:2.4px;--dy:-9.6px;--d:4.4s;--l:-1.0s"><rect x="171.7" y="249.7" width="8.3" height="8.3" transform="rotate(11 175.9 253.8)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:1.4px;--dy:-4.9px;--d:5.6s;--l:-1.2s"><rect x="120.5" y="253.6" width="8.1" height="8.1" transform="rotate(28 124.5 257.6)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-1.7px;--dy:-11.7px;--d:3.3s;--l:-1.7s"><rect x="101.9" y="251.3" width="7.9" height="7.9" transform="rotate(63 105.9 255.3)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:5.5px;--dy:-8.7px;--d:3.9s;--l:-1.4s"><rect x="144.0" y="254.4" width="8.1" height="8.1" transform="rotate(44 148.0 258.5)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-0.2px;--dy:-6.1px;--d:5.8s;--l:-0.5s"><rect x="72.5" y="257.4" width="6.8" height="6.8" transform="rotate(0 76.0 260.8)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:4.7px;--dy:-8.1px;--d:5.2s;--l:-0.5s"><rect x="179.0" y="264.8" width="7.0" height="7.0" transform="rotate(61 182.5 268.3)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:2.7px;--dy:-10.5px;--d:3.6s;--l:-0.9s"><rect x="151.7" y="271.2" width="5.8" height="5.8" transform="rotate(10 154.6 274.1)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:1.9px;--dy:-8.8px;--d:5.0s;--l:-0.8s"><rect x="166.6" y="274.3" width="4.6" height="4.6" transform="rotate(60 168.9 276.6)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-0.8px;--dy:-4.2px;--d:5.8s;--l:-1.3s"><rect x="193.9" y="267.6" width="5.8" height="5.8" transform="rotate(17 196.8 270.5)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:0.5px;--dy:-4.5px;--d:3.4s;--l:-4.4s"><rect x="83.4" y="273.6" width="4.3" height="4.3" transform="rotate(33 85.5 275.7)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-4.4px;--dy:-10.6px;--d:4.8s;--l:-5.2s"><rect x="144.7" y="282.2" width="5.7" height="5.7" transform="rotate(64 147.6 285.0)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-0.3px;--dy:-5.5px;--d:5.0s;--l:-2.0s"><rect x="136.2" y="284.0" width="5.4" height="5.4" transform="rotate(18 138.8 286.6)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-5.3px;--dy:-10.3px;--d:3.3s;--l:-0.6s"><rect x="127.3" y="284.3" width="5.1" height="5.1" transform="rotate(71 129.8 286.9)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:1.4px;--dy:-7.5px;--d:4.8s;--l:-4.2s"><rect x="32.2" y="286.4" width="5.2" height="5.2" transform="rotate(41 34.8 289.0)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:4.5px;--dy:-3.5px;--d:4.0s;--l:-3.4s"><rect x="124.3" y="289.9" width="3.6" height="3.6" transform="rotate(66 126.1 291.8)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-2.2px;--dy:-6.0px;--d:4.6s;--l:-1.3s"><rect x="182.2" y="297.9" width="3.0" height="3.0" transform="rotate(56 183.7 299.4)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-4.3px;--dy:-4.1px;--d:6.3s;--l:-1.3s"><rect x="45.9" y="293.8" width="4.0" height="4.0" transform="rotate(46 47.9 295.8)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-4.1px;--dy:-8.1px;--d:4.8s;--l:-2.0s"><rect x="98.7" y="303.5" width="3.0" height="3.0" transform="rotate(28 100.2 305.0)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-0.5px;--dy:-5.7px;--d:4.4s;--l:-3.1s"><rect x="82.4" y="298.5" width="3.3" height="3.3" transform="rotate(70 84.1 300.2)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:5.7px;--dy:-11.1px;--d:4.0s;--l:-0.2s"><rect x="211.3" y="302.4" width="3.0" height="3.0" transform="rotate(29 212.8 303.9)" fill="#F8F4E8" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-1.1px;--dy:-7.2px;--d:4.8s;--l:-3.0s"><rect x="71.4" y="309.9" width="3.0" height="3.0" transform="rotate(33 72.9 311.4)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+<g class="p" style="--dx:-2.8px;--dy:-11.8px;--d:3.5s;--l:-1.6s"><rect x="72.4" y="308.1" width="3.0" height="3.0" transform="rotate(9 73.9 309.6)" fill="#D2E823" stroke="#09090B" stroke-width="2"/></g>
+</svg>

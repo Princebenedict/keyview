@@ -36,7 +36,7 @@ const cls = (n) => (n > 0 ? 'pos' : n < 0 ? 'neg' : '');
 const stat = (label, value, c = '') => h('div', { class: 'stat' }, h('span', {}, label), h('b', { class: c }, value));
 const fmtDate = (ms) => (ms ? new Date(ms).toLocaleString() : 'no expiry');
 const flash = (el, text, bad) => el.replaceChildren(h('p', { class: bad ? 'err' : 'ok' }, text));
-const link = (href, text) => h('a', { href, style: 'color:var(--accent)' }, text);
+const link = (href, text) => h('a', { href }, text);
 const pill = (state) => h('span', { class: `pill ${state}` }, state);
 const panel = (...kids) => h('div', { class: 'panel' }, ...kids);
 function remaining(ms) {
@@ -48,7 +48,7 @@ function remaining(ms) {
 }
 
 // ---------- preferences ----------
-const getPrefs = () => ({ theme: 'dark', budget: 100, lastN: 1, ...store.get('kv.prefs', {}) });
+const getPrefs = () => ({ theme: 'light', budget: 100, lastN: 1, ...store.get('kv.prefs', {}) });
 const applyTheme = () => { document.documentElement.dataset.theme = getPrefs().theme; };
 applyTheme();
 
@@ -83,7 +83,7 @@ function renderAuth() {
   if (!testnet()) return;
   const s = session();
   if (s) el.append(h('span', { class: 'mute' }, s.account + ' '), h('button', { class: 'small ghost', onclick: () => { store.set('kv.session', null); render(); } }, 'Disconnect'));
-  else el.append(h('a', { href: '#/dashboard', style: 'color:var(--accent)' }, 'Connect wallet'));
+  else el.append(h('a', { href: '#/dashboard' }, 'Connect wallet'));
 }
 
 async function needProfile(title) {
@@ -116,7 +116,7 @@ function chart(curve) {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('viewBox', `0 0 ${w} ${ht}`);
   svg.setAttribute('class', 'chart');
-  svg.innerHTML = `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#00f5a0" stop-opacity=".32"/><stop offset="1" stop-color="#00f5a0" stop-opacity="0"/></linearGradient></defs>`
+  svg.innerHTML = `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--acid);stop-opacity:.6"/><stop offset="1" style="stop-color:var(--acid);stop-opacity:0"/></linearGradient></defs>`
     + `<line class="zero" x1="${padX}" x2="${w - padX}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}"/>`
     + `<path class="area" d="${area}" fill="url(#${id})"/><path class="line" pathLength="1" d="${line}"/>`
     + `<circle class="end" cx="${X(last).toFixed(1)}" cy="${Y(ys[last]).toFixed(1)}" r="4.5"/>`;
