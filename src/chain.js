@@ -1,29 +1,49 @@
 // NEAR JSON-RPC client and the on-chain ledger. No dependencies.
-export function createRpc(url) {
-  // Public RPCs rate-limit and hiccup. Retry network errors, 429 and 5xx a few times with a short backoff.
+export const DEFAULT_RPCS = {
+  testnet: ['https://rpc.testnet.near.org', 'https://rpc.testnet.fastnear.com', 'https://near-testnet.lava.build'],
+  mainnet: ['https://rpc.mainnet.near.org', 'https://rpc.mainnet.fastnear.com', 'https://near.lava.build'],
+};
+
+// urls: one endpoint or a list. Every call tries each endpoint in turn, so a dead or rate-limited
+// one is skipped. Contract errors (a panic in a view) are real answers and are not retried.
+export function createRpc(urls) {
+  const list = (Array.isArray(urls) ? urls : [urls]).filter(Boolean);
+  async function once(url, method, params) {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 'keyview', method, params }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }
   async function call(method, params) {
-    let last;
-    for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ jsonrpc: '2.0', id: 'keyview', method, params }),
-          signal: AbortSignal.timeout(8000),
-        });
-        if (res.status === 429 || res.status >= 500) throw new Error(`RPC HTTP ${res.status}`);
-        if (!res.ok) throw Object.assign(new Error(`RPC HTTP ${res.status}`), { final: true });
-        return await res.json();
-      } catch (e) {
-        last = e;
-        if (e.final) break;
-        await new Promise((r) => setTimeout(r, 200 * (attempt + 1) ** 2));
+    const errors = [];
+    for (let round = 0; round < 3; round++) {
+      for (const url of list) {
+        try { return await once(url, method, params); }
+        catch (e) { errors.push(`${new URL(url).host}: ${e.message}`); }
       }
+      await new Promise((r) => setTimeout(r, 250 * (round + 1)));
     }
-    throw last;
+    throw new Error(`No NEAR RPC answered (${[...new Set(errors)].join('; ')})`);
   }
   return {
-    url,
+    url: list[0],
+    urls: list,
+    // For /api/health?deep=1: which endpoints answer from this server right now.
+    async probe() {
+      return Promise.all(list.map(async (url) => {
+        const t0 = Date.now();
+        try {
+          const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 'p', method: 'status', params: [] }), signal: AbortSignal.timeout(6000) });
+          if (!res.ok) return { url, ok: false, ms: Date.now() - t0, error: `HTTP ${res.status}` };
+          const j = await res.json();
+          return { url, ok: !!j.result, ms: Date.now() - t0, chain: j.result?.chain_id || null, error: j.result ? null : 'no status result' };
+        } catch (e) { return { url, ok: false, ms: Date.now() - t0, error: e.message }; }
+      }));
+    },
     async view(contract, method, args) {
       const body = await call('query', {
         request_type: 'call_function', finality: 'final', account_id: contract,
@@ -49,7 +69,7 @@ export function yoctoToNear(yocto) {
 }
 
 export function createChainLedger({ contract, rpcUrl, network = 'testnet' }) {
-  const rpc = createRpc(rpcUrl);
+  const rpc = createRpc(rpcUrl || DEFAULT_RPCS[network]);
   const offerCache = new Map();
   return {
     mode: 'testnet',

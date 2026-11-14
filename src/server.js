@@ -23,10 +23,9 @@ export function ledgerFromEnv(env = process.env) {
   if (env.KEYVIEW_MODE === 'testnet') {
     if (!env.KEYVIEW_CONTRACT) throw new Error('KEYVIEW_MODE=testnet needs KEYVIEW_CONTRACT (the deployed access contract account)');
     const network = env.KEYVIEW_NETWORK || 'testnet';
-    return createChainLedger({
-      contract: env.KEYVIEW_CONTRACT, network,
-      rpcUrl: env.KEYVIEW_RPC || (network === 'mainnet' ? 'https://rpc.mainnet.near.org' : 'https://rpc.testnet.near.org'),
-    });
+    // KEYVIEW_RPC may be one URL or a comma separated list, tried in order.
+    const custom = env.KEYVIEW_RPC ? env.KEYVIEW_RPC.split(',').map((x) => x.trim()).filter(Boolean) : null;
+    return createChainLedger({ contract: env.KEYVIEW_CONTRACT, network, rpcUrl: custom || undefined });
   }
   return createDryRunLedger();
 }
@@ -136,7 +135,11 @@ export function createApp({ dataDir = path.join(ROOT, 'data'), ledger = createDr
       : 'Dry-run: payments and confidential execution are simulated. Nothing leaves this server.',
   }));
 
-  route('GET', '/api/health', async () => ({ ok: true, mode: ledger.mode }));
+  route('GET', '/api/health', async (req) => {
+    const out = { ok: true, mode: ledger.mode };
+    if (chain && new URL(req.url, 'http://x').searchParams.has('deep')) out.rpc = await ledger.rpc.probe();
+    return out;
+  });
 
   route('GET', '/api/attestation', async () => getAttestation({ master, contract: chain ? ledger.contract : null }));
 

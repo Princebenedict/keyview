@@ -54,7 +54,7 @@ No dependencies to install.
 
 1. `npm start`
 2. Open http://localhost:3000. You land on the product page. Click Launch app to open the app at http://localhost:3000/app.
-3. `npm test` (21 tests)
+3. `npm test` (24 tests)
 4. With the server running: `npm run smoke`
 
 ### Judge walkthrough: do X, see Y
@@ -111,7 +111,9 @@ See: 11 PASS lines. To test revoke, have the trader call `revoke` with `{"holder
 
 6. In the browser, open the server and use the Trader dashboard with Meteor or HERE wallet (see "What is verified" for the status of this part).
 
-Environment variables: see `.env.example`. `npm run login` signs in with a key from the environment and prints a session token, for scripts.
+Environment variables: see `.env.example`.
+
+NEAR RPC: the server tries several public endpoints in order and skips any that fail, so one rate-limited node does not take the site down. To pin your own, set `KEYVIEW_RPC` to one URL or a comma separated list. To see which endpoints answer from where the server runs, open `/api/health?deep=1`. `npm run login` signs in with a key from the environment and prints a session token, for scripts.
 
 ## What is verified, and what is not
 
@@ -130,7 +132,7 @@ Proof (open in a NEAR testnet explorer):
 - Accounts: contract `benkeyview.testnet`, trader `benkeyview-trader.testnet`, buyer `benkeyview-buyer.testnet`. Link form: `https://explorer.testnet.near.org/transactions/<id>`.
 
 Verified in the authoring sandbox and in CI:
-- 21 Node tests: public/private boundary, trade log, analytics, copy tracking, export and delete, encryption at rest, expiry, revoke, key-to-trader binding, Intents order building, NEP-413 sign and verify, sign-in replay and forgery rejection, the on-chain gate against a stub RPC.
+- 24 Node tests: public/private boundary, trade log, analytics, copy tracking, export and delete, encryption at rest, expiry, revoke, key-to-trader binding, Intents order building, NEP-413 sign and verify, sign-in replay and forgery rejection, the on-chain gate against a stub RPC.
 - 6 Rust unit tests on the contract (`npm run test:contract`), and the contract compiles to wasm.
 - The dry-run UI flow across all seven tabs (39 checks), by running the real `public/app.js` in jsdom against a live server (`test-ui/`, optional, needs `npm install` there).
 - `npm run smoke` against a running server, including the public demo.
