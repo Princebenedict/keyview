@@ -101,8 +101,10 @@ export function createApp({ dataDir = path.join(ROOT, 'data'), ledger = createDr
   };
   async function publicView(t, { withOffers = true } = {}) {
     let offers = [];
+    let offersError = false;
     if (withOffers) {
-      try { offers = chain ? await ledger.getOffers(t.account) : t.offers; } catch { offers = []; }
+      try { offers = chain ? await ledger.getOffers(t.account) : t.offers; }
+      catch (e) { offers = []; offersError = true; console.error(`Could not read offers for ${t.account}: ${e.message}`); }
     }
     return {
       account: t.account,
@@ -110,6 +112,7 @@ export function createApp({ dataDir = path.join(ROOT, 'data'), ledger = createDr
       strategy: t.strategy ? { name: t.strategy.name, tagline: t.strategy.tagline, mode: t.strategy.mode } : null,
       metrics: computeMetrics(privateTrades(t)),
       offers,
+      offersError,
       activeKeys: chain ? null : Object.values(db.keys).filter((k) => k.trader === t.account && keyState(k) === 'active').length,
     };
   }

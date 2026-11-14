@@ -54,7 +54,7 @@ No dependencies to install.
 
 1. `npm start`
 2. Open http://localhost:3000. You land on the product page. Click Launch app to open the app at http://localhost:3000/app.
-3. `npm test` (18 tests)
+3. `npm test` (21 tests)
 4. With the server running: `npm run smoke`
 
 ### Judge walkthrough: do X, see Y
@@ -130,7 +130,7 @@ Proof (open in a NEAR testnet explorer):
 - Accounts: contract `benkeyview.testnet`, trader `benkeyview-trader.testnet`, buyer `benkeyview-buyer.testnet`. Link form: `https://explorer.testnet.near.org/transactions/<id>`.
 
 Verified in the authoring sandbox and in CI:
-- 18 Node tests: public/private boundary, trade log, analytics, copy tracking, export and delete, encryption at rest, expiry, revoke, key-to-trader binding, Intents order building, NEP-413 sign and verify, sign-in replay and forgery rejection, the on-chain gate against a stub RPC.
+- 21 Node tests: public/private boundary, trade log, analytics, copy tracking, export and delete, encryption at rest, expiry, revoke, key-to-trader binding, Intents order building, NEP-413 sign and verify, sign-in replay and forgery rejection, the on-chain gate against a stub RPC.
 - 6 Rust unit tests on the contract (`npm run test:contract`), and the contract compiles to wasm.
 - The dry-run UI flow across all seven tabs (39 checks), by running the real `public/app.js` in jsdom against a live server (`test-ui/`, optional, needs `npm install` there).
 - `npm run smoke` against a running server, including the public demo.

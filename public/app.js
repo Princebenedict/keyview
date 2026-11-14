@@ -210,6 +210,7 @@ async function traderPage(account) {
   }
 
   function buyBox(reason) {
+    if (t.offersError) return h('div', { class: 'locked' }, h('p', { class: 'err' }, 'Could not read this trader\'s key offers from the chain. Refresh in a moment.'));
     if (!t.offers.length) return h('div', { class: 'locked' }, reason ? h('p', { class: 'err' }, reason) : null, 'This trader has not put any viewing keys on sale yet.');
     const msg = h('div', {});
     const dur = h('select', {}, t.offers.map((o) => h('option', { value: o.durationDays }, `${o.durationDays} days for ${o.priceNear} NEAR`)));
